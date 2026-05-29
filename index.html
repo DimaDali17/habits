@@ -425,36 +425,69 @@ body {
 </div>
 
 <script>
-const HABITS = [
-  // ── Утро
-  { id:'water_lemon',  section:'🌅 Утро',        name:'Стакан тёплой воды с лимоном натощак',        icon:'🍋' },
-  { id:'warmup',       section:'🌅 Утро',        name:'Разминка 10 мин (суставы + растяжка)',         icon:'🤸' },
-  { id:'no_sugar_am',  section:'🌅 Утро',        name:'Завтрак без сахара и сдобы',                   icon:'🥣' },
+const WORKOUT_SCHEDULE = {
+  1: { label: 'Пн \u00b7 Тяга', habits: [
+    { id:'w_neg_pull',  name:'Негативные подтягивания \u2014 4 \u00d7 4 (спуск 4 сек)', icon:'\ud83d\udd3c' },
+    { id:'w_row',       name:'Горизонтальная тяга под столом \u2014 3 \u00d7 8',        icon:'\u2194\ufe0f' },
+    { id:'w_dead_hang', name:'Вис на турнике \u2014 3 \u00d7 20 сек',                   icon:'\ud83e\ude9d' },
+  ]},
+  2: { label: 'Вт \u00b7 Толчок', habits: [
+    { id:'w_pushup',    name:'Отжимания \u2014 4 \u00d7 10',                            icon:'\ud83d\udcaa' },
+    { id:'w_wide_pu',   name:'Широкие отжимания (грудь) \u2014 3 \u00d7 8',             icon:'\ud83e\udd32' },
+    { id:'w_dips',      name:'Отжимания на стуле сзади (трицепс) \u2014 3 \u00d7 10',  icon:'\ud83e\ude91' },
+  ]},
+  3: { label: 'Ср \u00b7 Ноги + пресс', habits: [
+    { id:'w_squat',     name:'Приседания \u2014 4 \u00d7 15',                           icon:'\ud83e\uddb5' },
+    { id:'w_lunge',     name:'Выпады \u2014 3 \u00d7 10 на каждую ногу',                icon:'\ud83d\udeb6' },
+    { id:'w_leg_raise', name:'Подъём ног лёжа \u2014 3 \u00d7 12',                     icon:'\u2b06\ufe0f' },
+    { id:'w_plank',     name:'Планка \u2014 3 \u00d7 30\u201345 сек',                   icon:'\u23f1\ufe0f' },
+  ]},
+  4: { label: 'Чт \u00b7 Тяга', habits: [
+    { id:'w_neg_pull2', name:'Негативные подтягивания \u2014 4 \u00d7 5',               icon:'\ud83d\udd3c' },
+    { id:'w_row2',      name:'Горизонтальная тяга \u2014 3 \u00d7 10',                  icon:'\u2194\ufe0f' },
+    { id:'w_knee_bar',  name:'Подъём коленей на турнике \u2014 3 \u00d7 8',             icon:'\ud83e\ude9d' },
+  ]},
+  5: { label: 'Пт \u00b7 Толчок', habits: [
+    { id:'w_pushup2',   name:'Отжимания \u2014 4 \u00d7 12',                            icon:'\ud83d\udcaa' },
+    { id:'w_narrow_pu', name:'Узкие отжимания (трицепс) \u2014 3 \u00d7 8',             icon:'\ud83e\udd1c' },
+    { id:'w_pike_pu',   name:'Отжимания пикой (плечи) \u2014 3 \u00d7 8',              icon:'\ud83d\udd3a' },
+  ]},
+  6: { label: 'Сб \u00b7 Кардио', habits: [
+    { id:'w_run',       name:'Быстрая ходьба или лёгкий бег \u2014 30\u201340 мин',    icon:'\ud83c\udfc3' },
+    { id:'w_stretch',   name:'Растяжка всего тела \u2014 15 мин',                      icon:'\ud83e\udd38' },
+    { id:'w_breath',    name:'Дыхание 4-7-8 \u2014 5 мин',                             icon:'\ud83c\udf2c\ufe0f' },
+  ]},
+  0: { label: 'Вс \u00b7 Отдых', habits: [
+    { id:'w_rest_walk', name:'Прогулка в спокойном темпе 30+ мин',                     icon:'\ud83c\udf33' },
+    { id:'w_foam',      name:'Самомассаж / раскатка мышц \u2014 10 мин',               icon:'\ud83e\udde4' },
+  ]},
+};
 
-  // ── Тренировка
-  { id:'pushups',      section:'💪 Тренировка',  name:'Отжимания — 5 × 10',                          icon:'💪' },
-  { id:'pullups',      section:'💪 Тренировка',  name:'Подтягивания с прыжком — 5 × 5',              icon:'🏗️' },
-  { id:'abs',          section:'💪 Тренировка',  name:'Пресс на турнике (подъём ног) — 5 × 5',       icon:'⬆️' },
-  { id:'cardio',       section:'💪 Тренировка',  name:'Кардио: ходьба / бег 30+ мин',                icon:'🏃' },
-
-  // ── Питание (ключ к холестерину)
-  { id:'fiber',        section:'🥗 Питание',     name:'Клетчатка: овощи / бобы / овсянка',           icon:'🥦' },
-  { id:'olive_oil',    section:'🥗 Питание',     name:'Оливковое масло вместо сливочного',            icon:'🫒' },
-  { id:'nuts',         section:'🥗 Питание',     name:'Горсть орехов (грецкие / миндаль)',            icon:'🥜' },
-  { id:'no_fry',       section:'🥗 Питание',     name:'Без жарки — запечённое или варёное',           icon:'♨️' },
-  { id:'no_sweet',     section:'🥗 Питание',     name:'Без печенья, выпечки и фастфуда',              icon:'🚫' },
-  { id:'no_late',      section:'🥗 Питание',     name:'Не есть после 20:00',                         icon:'🌙' },
-  { id:'fish',         section:'🥗 Питание',     name:'Жирная рыба (лосось / скумбрия / сельдь)',    icon:'🐟', weekly:true },
-
-  // ── День
-  { id:'water_day',    section:'💧 Вода и день', name:'2 стакана воды в течение дня',                icon:'💧' },
-  { id:'walk',         section:'💧 Вода и день', name:'Прогулка на улице 60 мин',                    icon:'🚶' },
-  { id:'no_stress',    section:'💧 Вода и день', name:'5 мин спокойного дыхания / медитация',        icon:'🧘' },
-
-  // ── Вечер
-  { id:'book',         section:'🌙 Вечер',       name:'Чтение книги 30 мин',                         icon:'📖' },
-  { id:'sleep',        section:'🌙 Вечер',       name:'Экран выключен в 22:30 — сон в 23:00',        icon:'🌛' },
+const DAILY_HABITS = [
+  { id:'water_lemon', section:'\ud83c\udf05 Утро',    name:'Вода с лимоном натощак',                       icon:'\ud83c\udf4b' },
+  { id:'warmup',      section:'\ud83c\udf05 Утро',    name:'Разминка суставов 5\u20137 мин',               icon:'\ud83e\udd38' },
+  { id:'no_sugar_am', section:'\ud83c\udf05 Утро',    name:'Завтрак: овсянка / яйца / творог (без сдобы)', icon:'\ud83e\udd63' },
+  { id:'fiber',       section:'\ud83e\udd57 Питание', name:'Овощи или бобовые в любом приёме пищи',        icon:'\ud83e\udd66' },
+  { id:'nuts',        section:'\ud83e\udd57 Питание', name:'Горсть орехов вместо перекуса',                icon:'\ud83e\udd5c' },
+  { id:'no_fry',      section:'\ud83e\udd57 Питание', name:'Без жарки \u2014 варёное / запечённое',        icon:'\u2668\ufe0f' },
+  { id:'no_sweet',    section:'\ud83e\udd57 Питание', name:'Без выпечки, печенья и фастфуда',              icon:'\ud83d\udeab' },
+  { id:'no_late',     section:'\ud83e\udd57 Питание', name:'Не есть после 20:00',                         icon:'\ud83c\udf19' },
+  { id:'fish',        section:'\ud83e\udd57 Питание', name:'Жирная рыба (лосось / скумбрия)',              icon:'\ud83d\udc1f', weekly:true },
+  { id:'water_day',   section:'\ud83d\udca7 День',    name:'1.5\u20132 л воды за день',                    icon:'\ud83d\udca7' },
+  { id:'walk',        section:'\ud83d\udca7 День',    name:'Прогулка на улице 40\u201360 мин',             icon:'\ud83d\udeb6' },
+  { id:'book',        section:'\ud83c\udf19 Вечер',   name:'Чтение книги 20\u201330 мин',                  icon:'\ud83d\udcd6' },
+  { id:'sleep',       section:'\ud83c\udf19 Вечер',   name:'Экран выключен в 22:30, сон в 23:00',         icon:'\ud83c\udf1b' },
 ];
+
+function getHabitsForDate(d) {
+  const dow = d.getDay();
+  const w = WORKOUT_SCHEDULE[dow];
+  const wHabits = w.habits.map(h => ({ ...h, section: '\ud83c\udfd8\ufe0f ' + w.label }));
+  const daily = DAILY_HABITS;
+  return [...daily.slice(0,3), ...wHabits, ...daily.slice(3)];
+}
+
+const HABITS = getHabitsForDate(new Date());
 
 const MONTHS_RU = ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'];
 const MONTHS_RU_GEN = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
@@ -502,10 +535,11 @@ function switchTab(tab){
 
 function getStreak(){
   let streak=0, d=new Date(todayZero());
-  const total=HABITS.filter(h=>!h.weekly).length;
   for(let i=0;i<365;i++){
+    const habits=getHabitsForDate(d);
+    const total=habits.filter(h=>!h.weekly).length;
     const dd=state[dateKey(d)]||{};
-    const done=HABITS.filter(h=>!h.weekly).filter(h=>dd[h.id]).length;
+    const done=habits.filter(h=>!h.weekly).filter(h=>dd[h.id]).length;
     if(done>=Math.floor(total*0.8)){ streak++; d.setDate(d.getDate()-1); }
     else break;
   }
@@ -517,7 +551,7 @@ function getWeekPct(){
   for(let i=0;i<7;i++){
     const d=new Date(todayZero()); d.setDate(d.getDate()-i);
     const dd=state[dateKey(d)]||{};
-    const h=HABITS.filter(x=>!x.weekly);
+    const h=getHabitsForDate(d).filter(x=>!x.weekly);
     tot+=h.length; done+=h.filter(x=>dd[x.id]).length;
   }
   return tot>0?Math.round(done/tot*100):0;
@@ -525,9 +559,9 @@ function getWeekPct(){
 
 function dayPct(d){
   const dd=state[dateKey(d)]||{};
-  const h=HABITS.length;
-  const done=HABITS.filter(x=>dd[x.id]).length;
-  return h>0?Math.round(done/h*100):0;
+  const habits=getHabitsForDate(d);
+  const done=habits.filter(x=>dd[x.id]).length;
+  return habits.length>0?Math.round(done/habits.length*100):0;
 }
 
 function formatDate(d){
@@ -562,8 +596,9 @@ function renderDay(){
   }
 
   const dd=dayData(curDay);
-  const total=HABITS.length;
-  const done=HABITS.filter(h=>dd[h.id]).length;
+  const habitsToday=getHabitsForDate(curDay);
+  const total=habitsToday.length;
+  const done=habitsToday.filter(h=>dd[h.id]).length;
   const pct=total>0?Math.round(done/total*100):0;
 
   document.getElementById('prog-text').textContent=`${done} / ${total}`;
@@ -574,7 +609,7 @@ function renderDay(){
 
   // sections
   const sections={};
-  HABITS.forEach(h=>{ if(!sections[h.section])sections[h.section]=[]; sections[h.section].push(h); });
+  habitsToday.forEach(h=>{ if(!sections[h.section])sections[h.section]=[]; sections[h.section].push(h); });
   const container=document.getElementById('sections-container');
   container.innerHTML='';
   Object.entries(sections).forEach(([sec,habits])=>{
@@ -650,7 +685,7 @@ function showDayDetail(d){
   document.getElementById('mdt-title').textContent=title;
   const rows=document.getElementById('mdt-rows');
   rows.innerHTML='';
-  HABITS.forEach(h=>{
+  getHabitsForDate(d).forEach(h=>{
     const done=!!dd[h.id];
     const row=document.createElement('div');
     row.className='month-detail-row';
